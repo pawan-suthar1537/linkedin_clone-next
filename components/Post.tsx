@@ -8,11 +8,14 @@ import { Badge } from "./ui/badge";
 import Postcontent from "./Postcontent";
 import SocialOptions from "./SocialOptions";
 import { IPostDoc } from "@/models/postmodel";
-import ReactTimeago from "react-timeago"
+import ReactTimeago from "react-timeago";
+import { deletepost } from "@/lib/Serveraction";
 
 const Post = ({ post }: { post: IPostDoc }) => {
   const user = useUser();
+  // console.log("-----",user)
   const fullName = post.user.firstname + " " + post.user.lastname;
+  const loginuser = user?.user?.id === post?.user?.userId
   return (
     <div className="bg-white my-2 mx-2 md:mx-0 rounded-lg border border-gray-300">
       <div className="flex gap-2 p-4">
@@ -28,16 +31,32 @@ const Post = ({ post }: { post: IPostDoc }) => {
             <p className="text-xs text-gray-500">
               @{user && user.user ? user.user.username : "username"}
             </p>
-            
+
             <p className="text-xs text-gray-500">
-              <ReactTimeago date={new Date(post.createdAt)}/>
+              <ReactTimeago date={new Date(post.createdAt)} />
             </p>
           </div>
         </div>
         <div>
-          <Button className="rounded-full" size={"icon"} variant={"outline"}>
-            <Trash2 />
-          </Button>
+          
+        {loginuser && (
+          <div>
+            <Button
+              onClick={async () => {
+                try {
+                  await deletepost(post._id);
+                } catch (error) {
+                  console.error("Error deleting post:", error);
+                }
+              }}
+              className="rounded-full"
+              size={"icon"}
+              variant={"outline"}
+            >
+              <Trash2 />
+            </Button>
+          </div>
+        )}
         </div>
       </div>
       <Postcontent post={post} />

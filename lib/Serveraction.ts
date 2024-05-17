@@ -77,3 +77,26 @@ export const getpost = async () => {
     
   }
 }
+
+export const deletepost = async (postid: string) => {
+  await connectDB();
+  const user = await currentUser();
+  console.log("userrrrrr", user);
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+  const post = await Post.findById(postid);
+  if (!post) {
+    throw new Error("Post not found");
+  }
+  if (post.user.userId !== user.id) {
+    throw new Error("You are not authorized to delete this post");
+  }
+  try {
+    await Post.deleteOne({ _id: postid });
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error occurred while deleting the post");
+  }
+};
