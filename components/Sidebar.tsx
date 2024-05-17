@@ -4,7 +4,7 @@ import ProfilePhoto from "./shared/ProfilePhoto";
 
 const Sidebar = ({ user }: { user: any }) => {
   return (
-    <div className="hideen md:block w-[20%] h-fit border border-gray-300 rounded-lg bg-white">
+    <div className="hidden md:block w-[20%] h-fit border border-gray-300 rounded-lg bg-white">
       <div className="flex relative flex-col items-center">
         <div className="w-full h-16 overflow-hidden">
           {user && (

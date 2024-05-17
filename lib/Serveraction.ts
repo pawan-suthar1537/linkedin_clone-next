@@ -28,7 +28,7 @@ export const postcreateAction = async (
   }
 
   const image = selectedfile;
-  console.log(image);
+  // console.log(image);
 
   const userdetails: IUser = {
     firstname: user.firstName || "Pawan",
