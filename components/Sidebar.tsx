@@ -25,7 +25,7 @@ const Sidebar = ({ user }: { user: any }) => {
             <h1 className="font-bold hover:underline cursor-pointer">
               {user ? `${user?.firstName} ${user?.lastName}` : "Linkedin Clone"}
             </h1>
-            <p className="text-xs">@{user ? `${user.username}` : "Username"}</p>
+            <p className="text-xs">@{user ? `${user?.username}` : "Username"}</p>
           </div>
         </div>
         {/* impression */}

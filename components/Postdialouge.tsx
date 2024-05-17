@@ -12,10 +12,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ProfilePhoto from "./shared/ProfilePhoto";
 import { Textarea } from "./ui/textarea";
-import {  Images } from "lucide-react";
+import { Images } from "lucide-react";
 import { useRef, useState } from "react";
 import { readfileasdataUrl } from "@/lib/utils";
 import Image from "next/image";
+import { postcreateAction } from "@/lib/Serveraction";
 
 export function Postdialouge({
   setopen,
@@ -26,16 +27,31 @@ export function Postdialouge({
   open: boolean;
   src: string;
 }) {
+  const inputref = useRef<HTMLInputElement>(null);
+  const [selectedfile, setselectedfile] = useState("");
+  const [inputtext, setinputtext] = useState("");
 
-    const inputref = useRef<HTMLInputElement>(null)
-    const [selectedfile,setselectedfile] = useState("")
-    const filechangehandle = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-          const dataUrl = await readfileasdataUrl(file);
-          setselectedfile(dataUrl);
-        }
-      };
+  const inputhandle = (e: any) => {
+    setinputtext(e.target.value);
+  };
+  const filechangehandle = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const dataUrl = await readfileasdataUrl(file);
+      setselectedfile(dataUrl);
+    }
+  };
+
+  const postAction = async (formData: FormData) => {
+    const inputtext = formData.get("inputText") as string;
+    // console.log(inputtext)
+    try {
+      await postcreateAction(inputtext, selectedfile);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Dialog open={open}>
       <DialogContent
@@ -51,46 +67,51 @@ export function Postdialouge({
             </div>
           </DialogTitle>
         </DialogHeader>
-        <form action="">
+        <form action={postAction}>
           <div className="flex flex-col">
             <Textarea
+              onChange={inputhandle}
               id="name"
               name="inputText"
+              value={inputtext}
               className="border-none text-lg focus-visible:ring-0"
               placeholder="Type your message here."
             />
             <div className="my-4">
-                {
-                    selectedfile && (
-                        <Image src={selectedfile}
-                        alt="image"
-                        height={400}
-                        width={400}
-                        />
-                    )
-                }
+              {selectedfile && (
+                <Image
+                  src={selectedfile}
+                  alt="image"
+                  height={100}
+                  width={100}
+                />
+              )}
             </div>
           </div>
-        
-        <DialogFooter>
-          <div className="flex items-center gap-4">
-            <input
-            ref={inputref}
-            onChange={filechangehandle}
-              type="file"
-              name="image"
-              className="hidden"
-              accept="image/*"
-            />
 
-            <Button type="submit">Post</Button>
-          </div>
-        </DialogFooter>
-      </form>
-      <Button className="gap-4" onClick={()=>inputref?.current?.click()} variant={"ghost"}>
-        <Images className="text-blue-500"/>
-        <p className="text-[14px]">Media</p>
-      </Button>
+          <DialogFooter>
+            <div className="flex items-center gap-4">
+              <input
+                ref={inputref}
+                onChange={filechangehandle}
+                type="file"
+                name="image"
+                className="hidden"
+                accept="image/*"
+              />
+
+              <Button type="submit">Post</Button>
+            </div>
+          </DialogFooter>
+        </form>
+        <Button
+          className="gap-4"
+          onClick={() => inputref?.current?.click()}
+          variant={"ghost"}
+        >
+          <Images className="text-blue-500" />
+          <p className="text-[14px]">Media</p>
+        </Button>
       </DialogContent>
     </Dialog>
   );
