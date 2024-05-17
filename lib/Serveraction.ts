@@ -5,6 +5,7 @@ import { IUser } from "@/models/usermodel";
 import { currentUser } from "@clerk/nextjs/server";
 import { v2 as cloudinary } from "cloudinary";
 import connectDB from "./DB";
+import { revalidatePath } from "next/cache";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -16,8 +17,7 @@ export const postcreateAction = async (
   inputtext: string,
   selectedfile: string
 ) => {
-
-    await connectDB()
+  await connectDB();
   // check for user auth using clerk
   const user = await currentUser();
   if (!user) {
@@ -42,10 +42,10 @@ export const postcreateAction = async (
   try {
     if (image) {
       // create post with text and image
-      uploadresponse = await cloudinary.uploader.upload(image,{
+      uploadresponse = await cloudinary.uploader.upload(image, {
         public_id: `posts/${user.id}`,
       });
-      console.log("image")
+      console.log("image");
       await Post.create({
         description: inputtext,
         user: userdetails,
@@ -58,8 +58,22 @@ export const postcreateAction = async (
         user: userdetails,
       });
     }
+    revalidatePath("/")
   } catch (error) {
     console.log(error);
     throw new Error("Error occurred while creating post");
   }
 };
+
+export const getpost = async () => {
+  await connectDB();
+  try {
+    const posts = await Post.find().sort({createdAt:-1});
+    // console.log(posts);\
+    return JSON.parse(JSON.stringify(posts));
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
+}

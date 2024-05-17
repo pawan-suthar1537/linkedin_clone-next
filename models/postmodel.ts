@@ -6,7 +6,7 @@ import { IComment } from "./commentmodel";
 export interface IPost {
   description: string;
   user: IUser;
-  imgageUrl?: string;
+  imageUrl?: string;
   likes?: string[];
   comments: IComment[];
 }

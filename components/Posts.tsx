@@ -1,10 +1,17 @@
 import React from 'react'
 import Post from './Post'
+import { IPost, IPostDoc } from '@/models/postmodel'
 
-const Posts = () => {
+const Posts = ({posts}:{posts:IPostDoc[]}) => {
   return (
     <div>
-      <Post/>
+      {
+        posts.map((post)=>{
+          return (
+            <Post key={post._id} post={post} />
+          )
+        })
+      }
     </div>
   )
 }
