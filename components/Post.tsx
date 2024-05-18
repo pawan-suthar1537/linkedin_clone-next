@@ -49,7 +49,7 @@ const Post = ({ post }: { post: IPostDoc }) => {
                   console.error("Error deleting post:", error);
                 }
               }}
-              className="rounded-full"
+              className="rounded-full mr-[6px] md:mr-0"
               size={"icon"}
               variant={"outline"}
             >
@@ -60,7 +60,9 @@ const Post = ({ post }: { post: IPostDoc }) => {
         </div>
       </div>
       <Postcontent post={post} />
-      <SocialOptions />
+      <div>
+      <SocialOptions post={post} />
+      </div>
     </div>
   );
 };
