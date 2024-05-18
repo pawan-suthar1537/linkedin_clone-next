@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import React from "react";
+import Footer from "./Footer";
 
 const News = () => {
   interface NavItems {
@@ -29,6 +30,7 @@ const News = () => {
     },
   ];
   return (
+    <>
     <div className="hidden md:block w-[25%] bg-white h-fit rounded-lg border border-gray-300">
       <div className="flex items-center p-3 justify-between">
         <h1 className="font-medium">Linkedin News</h1>
@@ -47,7 +49,9 @@ const News = () => {
           );
         })}
       </div>
+    <Footer/>
     </div>
+    </>
   );
 };
 
