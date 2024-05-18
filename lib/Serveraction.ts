@@ -6,6 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { v2 as cloudinary } from "cloudinary";
 import connectDB from "./DB";
 import { revalidatePath } from "next/cache";
+import { Comment } from "@/models/commentmodel";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -58,7 +59,7 @@ export const postcreateAction = async (
         user: userdetails,
       });
     }
-    revalidatePath("/")
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
     throw new Error("Error occurred while creating post");
@@ -68,15 +69,16 @@ export const postcreateAction = async (
 export const getpost = async () => {
   await connectDB();
   try {
-    const posts = await Post.find().sort({createdAt:-1});
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate({ path: "comments", options: { sort: { createdAt: -1 } } });
     // console.log(posts);\
+    if(!posts) return []
     return JSON.parse(JSON.stringify(posts));
-    
   } catch (error) {
-    console.log(error)
-    
+    console.log(error);
   }
-}
+};
 
 export const deletepost = async (postid: string) => {
   await connectDB();
@@ -98,5 +100,40 @@ export const deletepost = async (postid: string) => {
   } catch (error) {
     console.log(error);
     throw new Error("Error occurred while deleting the post");
+  }
+};
+
+export const createcommentaction = async (postId: string, formData: FormData) => {
+  await connectDB();
+  try {
+    const user = await currentUser();
+    if (!user) throw new Error("User not authenticated");
+
+    const textInput = formData.get("inputText") as string;
+    if (!textInput) throw new Error("Input text is required");
+    if (!postId) throw new Error("Post id is required");
+
+    const userdetails: IUser = {
+      firstname: user.firstName || "Pawan",
+      lastname: user.lastName || "Suthar",
+      userId: user.id,
+      profilephoto: user.imageUrl,
+    };
+
+    const post = await Post.findById(postId);
+    if (!post) throw new Error("Post not found");
+
+    const comment = await Comment.create({
+      textmessage: textInput,
+      user: userdetails,
+    });
+
+    post.comments.push(comment._id);
+    await post.save();
+
+    revalidatePath("/");
+  } catch (error) {
+    console.error("Error occurred while creating comment:", error);
+    throw error;
   }
 };

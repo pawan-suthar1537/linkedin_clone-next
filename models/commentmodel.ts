@@ -4,7 +4,12 @@ import { IUser } from "./usermodel";
 
 export interface IComment {
   textmessage: string;
-  user: IUser;
+  user: {
+    userId: string;
+    profilephoto: string;
+    firstname: string;
+    lastname: string;
+  };
 }
 
 export interface ICommentDoc extends IComment, Document {

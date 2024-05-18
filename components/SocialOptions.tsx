@@ -3,6 +3,8 @@ import { Button } from "./ui/button";
 import { MessageCircleMore, Repeat, Send, ThumbsUp } from "lucide-react";
 import { IPostDoc } from "@/models/postmodel";
 import { useUser } from "@clerk/nextjs";
+import CommentInput from "./CommentInput";
+import Comments from "./Comments";
 
 const SocialOptions = ({ post }: { post: IPostDoc }) => {
   const { user } = useUser();
@@ -36,7 +38,7 @@ const SocialOptions = ({ post }: { post: IPostDoc }) => {
       throw new Error("Error liking post");
     }
 
-    const fetchalllikes = await fetch(`/api/posts/${post._id}/likes`);
+    const fetchalllikes = await fetch(`/api/posts/${post._id}/like`);
     if (!fetchalllikes.ok) {
       setlikes(templikes);
       throw new Error(" failed to fetch like ");
@@ -47,9 +49,14 @@ const SocialOptions = ({ post }: { post: IPostDoc }) => {
   return (
     <div>
       <div className="text-sm mx-2 p-2 flex items-center justify-between border-b border-gray-300 ">
-        {likes && likes.length > 0 && (
+        {(likes && likes.length > 0) && (
           <p className="text-xm text-gray-500 hover:text-blue-500 hover:underline hover:cursor-pointer">
-            {likes.length}
+            {likes.length} likes
+          </p>
+        )}
+        { (post.comments && post.comments.length > 0) && (
+          <p onClick={()=>setcommentopen(!commentopen)} className="text-xm text-gray-500 hover:text-blue-500 hover:underline hover:cursor-pointer">
+            {post.comments.length} comments
           </p>
         )}
       </div>
@@ -85,7 +92,11 @@ const SocialOptions = ({ post }: { post: IPostDoc }) => {
           <p>Send</p>
         </Button>
       </div>
-      {commentopen && <div>comments aayenge</div>}
+      {commentopen && 
+      <div className="p-4">
+        <CommentInput postId={post._id} />
+        <Comments post={post}/>
+        </div>}
     </div>
   );
 };
