@@ -48,7 +48,7 @@ export function Postdialouge({
     try {
       await postcreateAction(inputtext, selectedfile);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
     setinputtext("")
     setopen(false)

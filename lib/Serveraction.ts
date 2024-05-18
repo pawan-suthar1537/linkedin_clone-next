@@ -46,7 +46,7 @@ export const postcreateAction = async (
       uploadresponse = await cloudinary.uploader.upload(image, {
         public_id: `posts/${user.id}`,
       });
-      console.log("image");
+      // console.log("image");
       await Post.create({
         description: inputtext,
         user: userdetails,
@@ -61,7 +61,7 @@ export const postcreateAction = async (
     }
     revalidatePath("/");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw new Error("Error occurred while creating post");
   }
 };
@@ -76,14 +76,14 @@ export const getpost = async () => {
     if(!posts) return []
     return JSON.parse(JSON.stringify(posts));
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
 export const deletepost = async (postid: string) => {
   await connectDB();
   const user = await currentUser();
-  console.log("userrrrrr", user);
+  // console.log("userrrrrr", user);
   if (!user) {
     throw new Error("User not authenticated");
   }
@@ -98,7 +98,7 @@ export const deletepost = async (postid: string) => {
     await Post.deleteOne({ _id: postid });
     revalidatePath("/");
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw new Error("Error occurred while deleting the post");
   }
 };

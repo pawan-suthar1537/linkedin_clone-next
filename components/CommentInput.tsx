@@ -26,7 +26,7 @@ const CommentInput = ({ postId }: { postId: string }) => {
       createcommentaction(postId, formData);
       setInputText(""); // Clear the input field after submitting the comment
     } catch (error) {
-      console.log("Error posting comment:", error);
+    //   console.log("Error posting comment:", error);
       throw new Error("Error posting comment");
     }
   };
