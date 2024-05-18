@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +24,10 @@ export default function RootLayout({
         <body className={`${inter.className} min-h-screen flex flex-col`}>
           <Navbar />
           <div className="md:bg-[#F4F2EE] flex-1 w-full ">
-            <main className="max-w-6xl mx-auto">{children}</main>
+            <main className="max-w-6xl mx-auto">
+              {children}
+              <Toaster />
+              </main>
           </div> 
         </body>
       </html>
