@@ -29,6 +29,10 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
+## Description
+
+This LinkedIn clone is a web application built using Next.js, Clerk, Cloudinary, and MongoDB. The app allows users to sign up, log in, and create posts with text and images. Authenticated users can like and comment on posts, fostering engagement. Key features include secure authentication, real-time updates, and a responsive design, providing a seamless user experience across all devices
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
