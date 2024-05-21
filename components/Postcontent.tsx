@@ -12,9 +12,9 @@ const Postcontent = ({ post }: { post: IPostDoc }) => {
           width={100}
           height={100}
           alt="postimage"
+          unoptimized
           quality={100}
           className="w-full mx-auto  "
-          
         />
       )}
     </div>
