@@ -11,10 +11,11 @@ import { IPostDoc } from "@/models/postmodel";
 import ReactTimeago from "react-timeago";
 import { deletepost } from "@/lib/Serveraction";
 
-const Post = ({ post }: { post: IPostDoc }) => {
+const Post = ({ post }: { post: any }) => {
   const user = useUser();
-  // console.log("----->>",user)
+  console.log("----->>",user)
   const fullName = post.user.firstname + " " + post.user.lastname;
+  const username = post.user.username ? `@${post.user.username}` : "@ username";
   const loginuser = user?.user?.id === post?.user?.userId
   return (
     <div className="bg-white my-2 mx-2 md:mx-0 rounded-lg border border-gray-300">
@@ -29,7 +30,7 @@ const Post = ({ post }: { post: IPostDoc }) => {
               </Badge>
             </h1>
             <p className="text-xs text-gray-500">
-              @{user && user.user ? user.user.username  : "username"}
+            {username}
             </p>
 
             <p className="text-xs text-gray-500">

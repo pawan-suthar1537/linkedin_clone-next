@@ -5,6 +5,8 @@ import { getpost } from "@/lib/Serveraction";
 
 const Sidebar = async ({ user }: { user: any }) => {
   const posts = await getpost()
+  const username = user?.username ? `@${user?.username}` : "@ username";
+
   return (
     <div className="hidden md:block w-[20%] h-fit border border-gray-300 rounded-lg bg-white">
       <div className="flex relative flex-col items-center">
@@ -23,11 +25,15 @@ const Sidebar = async ({ user }: { user: any }) => {
           <ProfilePhoto src={user ? user?.imageUrl : "/bannerr.jpg"} />
         </div>
         <div className="border-b border-b-gray-300">
-          <div className="p-2 mt-5 text-center">
+                    <div className="p-2 mt-5 text-center">
             <h1 className="font-bold hover:underline cursor-pointer">
               {user ? `${user?.firstName} ${user?.lastName}` : "Linkedin Clone"}
             </h1>
-            <p className="text-xs">@{user ? `${user?.username}` : "Username"}</p>
+            {
+              username && (
+                <p className="text-xs">{username}</p>
+              )
+            }
           </div>
         </div>
         {/* impression */}
