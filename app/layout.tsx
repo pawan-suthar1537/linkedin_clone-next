@@ -4,7 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,9 +27,20 @@ export default function RootLayout({
           <div className="md:bg-[#F4F2EE] flex-1 w-full ">
             <main className="max-w-6xl mx-auto">
               {children}
-              <Toaster />
-              </main>
-          </div> 
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                
+              />
+
+              {/* <Toaster /> */}
+            </main>
+          </div>
         </body>
       </html>
     </ClerkProvider>

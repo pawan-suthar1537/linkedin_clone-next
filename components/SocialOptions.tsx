@@ -5,6 +5,7 @@ import { IPostDoc } from "@/models/postmodel";
 import { useUser } from "@clerk/nextjs";
 import CommentInput from "./CommentInput";
 import Comments from "./Comments";
+import { toast } from "react-toastify";
 
 const SocialOptions = ({ post }: { post: IPostDoc }) => {
   const { user } = useUser();
@@ -12,7 +13,12 @@ const SocialOptions = ({ post }: { post: IPostDoc }) => {
   const [likes, setlikes] = useState(post.likes);
   const [commentopen, setcommentopen] = useState(false);
   const likedislikehandle = async () => {
+    if (!user) {
+      toast.error("You must be logged in to like posts.");
+      return;
+    }
     if (!user) throw new Error("User not found");
+    
     const templiked = liked;
     const templikes = likes;
     const dislike = likes?.filter((userId: string) => userId !== user.id);
@@ -46,6 +52,15 @@ const SocialOptions = ({ post }: { post: IPostDoc }) => {
     const likedata = await fetchalllikes.json();
     setlikes(likedata);
   };
+
+  const handleCommentToggle = () => {
+    if (!user) {
+      toast.error("You must be logged in to comment on posts.");
+      return;
+    }
+    setcommentopen(!commentopen);
+  };
+
   return (
     <div>
       <div className="text-sm mx-2 p-2 flex items-center justify-between border-b border-gray-300 ">
@@ -55,7 +70,7 @@ const SocialOptions = ({ post }: { post: IPostDoc }) => {
           </p>
         )}
         { (post.comments && post.comments.length > 0) && (
-          <p onClick={()=>setcommentopen(!commentopen)} className="text-xm text-gray-500 hover:text-blue-500 hover:underline hover:cursor-pointer">
+          <p onClick={handleCommentToggle} className="text-xm text-gray-500 hover:text-blue-500 hover:underline hover:cursor-pointer">
             {post.comments.length} comments
           </p>
         )}
@@ -70,7 +85,7 @@ const SocialOptions = ({ post }: { post: IPostDoc }) => {
           <p className={`${liked && "text-[#378FE9]"}`}>Likes</p>
         </Button>
         <Button
-          onClick={() => setcommentopen(!commentopen)}
+          onClick={handleCommentToggle}
           className="flex items-center gap-1 rounded-lg text-gray-600 hover:text-black"
           variant={"ghost"}
         >

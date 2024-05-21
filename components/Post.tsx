@@ -13,7 +13,7 @@ import { deletepost } from "@/lib/Serveraction";
 
 const Post = ({ post }: { post: IPostDoc }) => {
   const user = useUser();
-  // console.log("-----",user)
+  // console.log("----->>",user)
   const fullName = post.user.firstname + " " + post.user.lastname;
   const loginuser = user?.user?.id === post?.user?.userId
   return (
@@ -29,7 +29,7 @@ const Post = ({ post }: { post: IPostDoc }) => {
               </Badge>
             </h1>
             <p className="text-xs text-gray-500">
-              @{user && user.user ? user.user.username : "username"}
+              @{user && user.user ? user.user.username  : "username"}
             </p>
 
             <p className="text-xs text-gray-500">
